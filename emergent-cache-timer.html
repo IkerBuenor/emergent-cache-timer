@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergent Cache Timer | Maximize Credit Efficiency</title>
+  <meta name="description" content="Save 60-80% on Emergent credits using the 5-minute cache rule. Free tool by Iker.">
+  
+  <!-- Open Graph for LinkedIn/Social sharing -->
+  <meta property="og:title" content="Emergent Cache Timer">
+  <meta property="og:description" content="Save 60-80% on Emergent credits using the 5-minute cache rule.">
+  <meta property="og:type" content="website">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --emerald: #00AA88;
+      --emerald-dark: #008866;
+      --emerald-light: #00CC9F;
+      --warning: #F5A623;
+      --danger: #E53E3E;
+      --bg-dark: #0D1117;
+      --bg-card: #161B22;
+      --bg-input: #21262D;
+      --text-primary: #F0F6FC;
+      --text-secondary: #8B949E;
+      --text-muted: #6E7681;
+      --border: #30363D;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-primary);
+    }
+
+    .container {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* Timer Display */
+    .timer-section {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--emerald);
+      line-height: 1;
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .timer.warning {
+      color: var(--warning);
+    }
+
+    .timer.danger {
+      color: var(--danger);
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .status {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      min-height: 21px;
+    }
+
+    .status-icon {
+      margin-right: 6px;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      height: 6px;
+      background: var(--bg-dark);
+      border-radius: 3px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--emerald);
+      border-radius: 3px;
+      width: 100%;
+      transition: width 0.1s linear, background-color 0.3s ease;
+    }
+
+    .progress-bar.warning {
+      background: var(--warning);
+    }
+
+    .progress-bar.danger {
+      background: var(--danger);
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-start {
+      background: var(--emerald);
+      color: white;
+    }
+
+    .btn-start:hover:not(:disabled) {
+      background: var(--emerald-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 170, 136, 0.3);
+    }
+
+    .btn-start:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-reset {
+      background: var(--bg-input);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      background: var(--border);
+    }
+
+    /* Tasks Section */
+    .tasks-section {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .tasks-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .btn-clear-tasks {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-clear-tasks:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: rgba(229, 62, 62, 0.1);
+    }
+
+    .task-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--emerald);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-add {
+      padding: 10px 16px;
+      background: var(--emerald);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-add:hover {
+      background: var(--emerald-light);
+    }
+
+    .task-list {
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      transition: opacity 0.2s, background 0.2s;
+    }
+
+    .task-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-item.completed {
+      opacity: 0.5;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--emerald);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .task-delete {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      font-size: 16px;
+      line-height: 1;
+      opacity: 0;
+      transition: opacity 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .task-item:hover .task-delete {
+      opacity: 1;
+    }
+
+    .task-delete:hover {
+      color: var(--danger);
+    }
+
+    /* Tips Section */
+    .tips-section {
+      background: rgba(0, 170, 136, 0.1);
+      border: 1px solid rgba(0, 170, 136, 0.2);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .tips-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--emerald);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .tips-list {
+      list-style: none;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .tips-list li {
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .tips-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--emerald);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: var(--emerald);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .footer a:hover {
+      color: var(--emerald-light);
+      text-decoration: underline;
+    }
+
+    /* Notification permission banner */
+    .notification-banner {
+      background: rgba(0, 170, 136, 0.15);
+      border: 1px solid rgba(0, 170, 136, 0.3);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .notification-banner.hidden {
+      display: none;
+    }
+
+    .notification-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .btn-notify {
+      padding: 8px 14px;
+      background: var(--emerald);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Scrollbar styling */
+    .task-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .task-list::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+      border-radius: 3px;
+    }
+
+    .task-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .task-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">⏱️</div>
+        <h1>Emergent Cache Timer</h1>
+      </div>
+      <p class="subtitle">Maximize cache hits, minimize credits</p>
+    </div>
+
+    <!-- Notification Banner -->
+    <div class="notification-banner" id="notificationBanner">
+      <span class="notification-text">🔔 Enable notifications to get alerts when cache expires</span>
+      <button class="btn-notify" onclick="requestNotifications()">Enable</button>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer-section">
+      <div class="timer" id="timer">5:00</div>
+      <div class="status" id="status">Ready to start your session</div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn-start" id="startBtn" onclick="startTimer()">
+        🚀 I Sent Context
+      </button>
+      <button class="btn-reset" onclick="resetTimer()">
+        🔄 Reset
+      </button>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="tasks-section">
+      <div class="tasks-header">
+        <span>📝 Batch Your Tasks</span>
+        <button class="btn-clear-tasks" id="clearDefaultBtn" onclick="clearAllTasks()">Clear examples</button>
+      </div>
+      <div class="task-input-row">
+        <input type="text" id="taskInput" placeholder="Add a task to complete while cache is hot...">
+        <button class="btn-add" onclick="addTask()">Add</button>
+      </div>
+      <ul class="task-list" id="taskList"></ul>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="tips-section">
+      <div class="tips-header">
+        💡 Pro Tips
+      </div>
+      <ul class="tips-list">
+        <li>Prepare 3-5 related tasks before starting</li>
+        <li>Stay in the same module/context</li>
+        <li>Push to GitHub when cache expires</li>
+        <li>Start fresh chat and import repo to continue</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Created by <a href="https://www.linkedin.com/in/ikeralvarez-builder" target="_blank" rel="noopener">Iker</a> • 
+      <a href="https://vibes.emergent.sh/tips" target="_blank" rel="noopener">Read more tips on Vibes</a>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const CACHE_DURATION = 5 * 60; // 5 minutes in seconds
+    const WARNING_THRESHOLD = 2 * 60; // 2 minutes - yellow
+    const DANGER_THRESHOLD = 60; // 1 minute - red
+    const BEEP_TIMES = [240, 180, 120, 60, 30, 10]; // Beep at 4m, 3m, 2m, 1m, 30s, 10s
+    
+    const STORAGE_KEYS = {
+      startTime: 'emergent_cache_start',
+      tasks: 'emergent_cache_tasks'
+    };
+
+    // ============================================
+    // STATE
+    // ============================================
+    let startTime = null;
+    let timerInterval = null;
+    let beepsPlayed = new Set();
+    let audioContext = null;
+
+    // ============================================
+    // DOM ELEMENTS
+    // ============================================
+    const timerEl = document.getElementById('timer');
+    const statusEl = document.getElementById('status');
+    const progressBar = document.getElementById('progressBar');
+    const startBtn = document.getElementById('startBtn');
+    const notificationBanner = document.getElementById('notificationBanner');
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    // ============================================
+    // AUDIO
+    // ============================================
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    async function playBeep(frequency = 800, duration = 150, count = 1) {
+      if (!audioContext) {
+        initAudio();
+      }
+      
+      // Always try to resume if suspended
+      if (audioContext.state === 'suspended') {
+        try {
+          await audioContext.resume();
+        } catch (e) {
+          console.log('Could not resume audio context');
+          return;
+        }
+      }
+      
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          try {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            const now = audioContext.currentTime;
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration / 1000);
+            
+            oscillator.start(now);
+            oscillator.stop(now + duration / 1000);
+          } catch (e) {
+            console.log('Beep error:', e);
+          }
+        }, i * 200);
+      }
+    }
+
+    // ============================================
+    // NOTIFICATIONS
+    // ============================================
+    function checkNotificationPermission() {
+      if (!('Notification' in window)) {
+        notificationBanner.classList.add('hidden');
+        return;
+      }
+      
+      if (Notification.permission === 'granted') {
+        notificationBanner.classList.add('hidden');
+      } else if (Notification.permission === 'denied') {
+        notificationBanner.classList.add('hidden');
+      }
+    }
+
+    function requestNotifications() {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            notificationBanner.classList.add('hidden');
+            showNotification('Notifications enabled!', 'You\'ll be alerted when cache expires.');
+          }
+        });
+      }
+    }
+
+    function showNotification(title, body) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+          body: body,
+          icon: '⏱️',
+          badge: '⏱️'
+        });
+      }
+    }
+
+    // ============================================
+    // TIMER FUNCTIONS
+    // ============================================
+    function startTimer() {
+      initAudio();
+      
+      startTime = Date.now();
+      beepsPlayed.clear();
+      
+      startBtn.disabled = true;
+      
+      localStorage.setItem(STORAGE_KEYS.startTime, startTime.toString());
+      
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 100);
+      
+      showNotification('Cache Timer Started', 'You have 5 minutes to complete your tasks!');
+    }
+
+    function updateTimer() {
+      if (!startTime) return;
+
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.max(0, CACHE_DURATION - elapsed);
+
+      // Update display
+      const minutes = Math.floor(remaining / 60);
+      const seconds = remaining % 60;
+      timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+      // Update progress bar
+      const progress = (remaining / CACHE_DURATION) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      // Update colors and status based on time
+      if (remaining === 0) {
+        // Expired
+        timerEl.classList.remove('warning');
+        timerEl.classList.add('danger');
+        progressBar.classList.remove('warning');
+        progressBar.classList.add('danger');
+        statusEl.innerHTML = '<span class="status-icon">❌</span>Cache expired - Push to GitHub & restart';
+        
+        clearInterval(timerInterval);
+        timerInterval = null;
+        startBtn.disabled = false;
+        
+        playBeep(400, 300, 3);
+        showNotification('⏱️ Cache Expired!', 'Time to push to GitHub and start a fresh session.');
+        
+        localStorage.removeItem(STORAGE_KEYS.startTime);
+        
+      } else if (remaining <= DANGER_THRESHOLD) {
+        // Danger zone (< 1 min)
+        timerEl.classList.remove('warning');
+        timerEl.classList.add('danger');
+        progressBar.classList.remove('warning');
+        progressBar.classList.add('danger');
+        statusEl.innerHTML = `<span class="status-icon">🚨</span>${remaining}s left - Finish current task!`;
+        
+      } else if (remaining <= WARNING_THRESHOLD) {
+        // Warning zone (< 2 min)
+        timerEl.classList.add('warning');
+        timerEl.classList.remove('danger');
+        progressBar.classList.add('warning');
+        progressBar.classList.remove('danger');
+        const tasksLeft = document.querySelectorAll('.task-item:not(.completed)').length;
+        statusEl.innerHTML = `<span class="status-icon">⚠️</span>Cache cooling - ${tasksLeft} tasks remaining`;
+        
+      } else {
+        // Normal
+        timerEl.classList.remove('warning', 'danger');
+        progressBar.classList.remove('warning', 'danger');
+        const tasksLeft = document.querySelectorAll('.task-item:not(.completed)').length;
+        statusEl.innerHTML = `<span class="status-icon">✅</span>Cache hot - ${tasksLeft} tasks remaining`;
+      }
+
+      // Play beeps at specific intervals
+      BEEP_TIMES.forEach(beepTime => {
+        if (remaining === beepTime && !beepsPlayed.has(beepTime)) {
+          beepsPlayed.add(beepTime);
+          
+          if (beepTime <= 30) {
+            playBeep(600, 100, 2);
+          } else if (beepTime <= 60) {
+            playBeep(700, 150, 1);
+            showNotification('⚠️ 1 Minute Left!', 'Finish your current task or prepare to push to GitHub.');
+          } else {
+            playBeep(800, 100, 1);
+          }
+        }
+      });
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      startTime = null;
+      beepsPlayed.clear();
+
+      timerEl.textContent = '5:00';
+      timerEl.classList.remove('warning', 'danger');
+      progressBar.style.width = '100%';
+      progressBar.classList.remove('warning', 'danger');
+      statusEl.innerHTML = 'Ready to start your session';
+      startBtn.disabled = false;
+
+      localStorage.removeItem(STORAGE_KEYS.startTime);
+    }
+
+    // ============================================
+    // TASK FUNCTIONS
+    // ============================================
+    function addTask(text = null) {
+      const taskText = text || taskInput.value.trim();
+      if (!taskText) return;
+
+      const li = document.createElement('li');
+      li.className = 'task-item';
+      li.innerHTML = `
+        <input type="checkbox" class="task-checkbox" onchange="toggleTask(this)">
+        <span class="task-text">${escapeHtml(taskText)}</span>
+        <button class="task-delete" onclick="deleteTask(this)" title="Delete task">×</button>
+      `;
+
+      taskList.appendChild(li);
+      taskInput.value = '';
+      taskInput.focus();
+
+      saveTasks();
+    }
+
+    function toggleTask(checkbox) {
+      const taskItem = checkbox.closest('.task-item');
+      taskItem.classList.toggle('completed', checkbox.checked);
+      saveTasks();
+    }
+
+    function deleteTask(btn) {
+      const taskItem = btn.closest('.task-item');
+      taskItem.remove();
+      saveTasks();
+    }
+
+    function clearAllTasks() {
+      taskList.innerHTML = '';
+      saveTasks();
+    }
+
+    function saveTasks() {
+      const tasks = [];
+      document.querySelectorAll('.task-item').forEach(item => {
+        tasks.push({
+          text: item.querySelector('.task-text').textContent,
+          completed: item.querySelector('.task-checkbox').checked
+        });
+      });
+      localStorage.setItem(STORAGE_KEYS.tasks, JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const saved = localStorage.getItem(STORAGE_KEYS.tasks);
+      if (saved) {
+        const tasks = JSON.parse(saved);
+        tasks.forEach(task => {
+          const li = document.createElement('li');
+          li.className = 'task-item' + (task.completed ? ' completed' : '');
+          li.innerHTML = `
+            <input type="checkbox" class="task-checkbox" onchange="toggleTask(this)" ${task.completed ? 'checked' : ''}>
+            <span class="task-text">${escapeHtml(task.text)}</span>
+            <button class="task-delete" onclick="deleteTask(this)" title="Delete task">×</button>
+          `;
+          taskList.appendChild(li);
+        });
+      } else {
+        // Default tasks for first-time users
+        const defaultTasks = [
+          'Add error handling',
+          'Implement logging',
+          'Add input validation',
+          'Write tests',
+          'Update documentation'
+        ];
+        defaultTasks.forEach(task => addTask(task));
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ============================================
+    // PERSISTENCE
+    // ============================================
+    function loadSavedTimer() {
+      const savedStart = localStorage.getItem(STORAGE_KEYS.startTime);
+      if (savedStart) {
+        const elapsed = Math.floor((Date.now() - parseInt(savedStart)) / 1000);
+        if (elapsed < CACHE_DURATION) {
+          // Timer still valid, resume
+          startTime = parseInt(savedStart);
+          startBtn.disabled = true;
+          timerInterval = setInterval(updateTimer, 100);
+          updateTimer();
+        } else {
+          // Timer expired while away
+          localStorage.removeItem(STORAGE_KEYS.startTime);
+        }
+      }
+    }
+
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    taskInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    // Handle visibility change (pause/resume when tab hidden/visible)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && startTime) {
+        updateTimer();
+      }
+    });
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    function init() {
+      checkNotificationPermission();
+      loadTasks();
+      loadSavedTimer();
+    }
+
+    init();
+  </script>
+</body>
+</html>
